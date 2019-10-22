@@ -1,0 +1,126 @@
+{
+  "v": "4.0",
+  "name": "quarkus-example",
+  "workspace": {
+    "defaultEnv": "default",
+    "environments": {
+      "default": {
+        "machines": {
+          "dev-machine": {
+            "attributes": {
+              "memoryLimitBytes": "5368709120"
+            },
+            "servers": {
+              "5005/tcp": {
+                "port": "5005",
+                "attributes": {},
+                "protocol": "http"
+              },
+              "8080/tcp": {
+                "port": "8080",
+                "attributes": {},
+                "protocol": "http"
+              },
+              "8000/tcp": {
+                "port": "8000",
+                "attributes": {},
+                "protocol": "http"
+              }
+            },
+            "volumes": {},
+            "installers": [
+              "org.eclipse.che.exec",
+              "org.eclipse.che.terminal",
+              "org.eclipse.che.ws-agent",
+              "org.eclipse.che.ls.java"
+            ],
+            "env": {}
+          }
+        },
+        "recipe": {
+          "type": "dockerimage",
+          "content": "image-registry.openshift-image-registry.svc:5000/openshift/quarkus-stack:1.0"
+        }
+      }
+    },
+    "projects": [
+      {
+        "links": [],
+        "name": "quarkus-workshop-labs",
+        "attributes": {
+          "contribute_to_branch": [
+            "master"
+          ]
+        },
+        "type": "maven",
+        "source": {
+          "location": "https://github.com/RedHatWorkshops/quarkus-workshop-labs",
+          "type": "git",
+          "parameters": {}
+        },
+        "path": "/quarkus-workshop-labs",
+        "problems": [],
+        "mixins": [
+          "pullrequest"
+        ]
+      }
+    ],
+    "name": "workspace-user1",
+    "attributes": {},
+    "commands": [
+      {
+        "commandLine": "mvn verify -f ${current.project.path}",
+        "name": "Run Quarkus Tests",
+        "attributes": {
+          "goal": "Test",
+          "previewUrl": ""
+        },
+        "type": "mvn"
+      },
+      {
+        "commandLine": "mvn clean compile quarkus:dev -f ${current.project.path}",
+        "name": "Start Live Coding",
+        "attributes": {
+          "goal": "Run",
+          "previewUrl": "${server.8080/tcp}"
+        },
+        "type": "custom"
+      },
+      {
+        "commandLine": "MAVEN_OPTS=\"-Xmx1024M -Xss128M -XX:MetaspaceSize=512M -XX:MaxMetaspaceSize=1024M -XX:+CMSClassUnloadingEnabled\" mvn -f ${current.project.path} clean package -Pnative -DskipTests",
+        "name": "Build Native Quarkus App",
+        "attributes": {
+          "goal": "Package",
+          "previewUrl": ""
+        },
+        "type": "custom"
+      },
+      {
+        "commandLine": "MAVEN_OPTS=\"-Xmx1024M -Xss128M -XX:MetaspaceSize=512M -XX:MaxMetaspaceSize=1024M -XX:+CMSClassUnloadingEnabled\" mvn -f ${current.project.path} clean package -DskipTests",
+        "name": "Create Executable JAR",
+        "attributes": {
+          "goal": "Package",
+          "previewUrl": ""
+        },
+        "type": "custom"
+      },
+      {
+        "commandLine": "mvn clean compile quarkus:dev -Ddebug -f ${current.project.path}",
+        "name": "Debug Quarkus App",
+        "attributes": {
+          "goal": "Debug",
+          "previewUrl": "${server.8080/tcp}"
+        },
+        "type": "custom"
+      }
+    ],
+    "links": []
+  },
+  "id": "factoryaofatvuarn8mddij",
+  "creator": {
+    "name": "user1",
+    "email": "user1@no-reply.com",
+    "created": 1571752167611,
+    "userId": "8b2a3289-863a-4fde-967d-58a76be0da23"
+  }
+}
